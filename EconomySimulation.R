@@ -1,14 +1,11 @@
 Population <- 100
-#An input of any sort, could be data, could be labour. Per cycle
-Input <- 8
 
 #Define the starting allocation:
 Capital = rchisq(100,df=1)
 Labour = rchisq(100,df=1)
-#This gives 0 values, but we want values from 1 to 5
 Alpha = rchisq(100,df=1)
 Beta = rchisq(100,df=1)
-HarbergerTaxRate = 0.05
+HarbergerTaxRate = 0.01
 Maxiter = 5
 
 start <- data.frame("ID"= 1:Population,
@@ -51,7 +48,6 @@ while (Counter <= Maxiter) {
     
     for (Input in c("Capital","Labour")){
       
-      
       if (Input=="Capital"){
         SubstitutionRate <- "Alpha"
         Inputprice <- CapitalPrice
@@ -64,7 +60,7 @@ while (Counter <= Maxiter) {
       #when the agent has the lowest valuation, there is no point in making transactions because they will not be able
       #to get a cheaper price
       if (SubstitutionValue == min(start[[SubstitutionRate]])) next
-      if (nrow(subset(start, Input < SubstitutionValue & Input > 0))) next #if there is no one to buy from we jump
+      if (nrow(subset(start, start[[SubstitutionRate]] < SubstitutionValue & start[[Input]] > 0))==0) next #if there is no one to buy from we jump
       
       IdealInputRatio <- SubstitutionValue/(start$Alpha[Buyer]+start$Beta[Buyer]) #Given by Cobb Douglas,
       
@@ -76,11 +72,9 @@ while (Counter <= Maxiter) {
              sum(subset(start, ID != Buyer, select = Input)) > 0 & #there must be something in the market
              start$Capital[Buyer] > 0 #also the agent must be able to buy it.
       ) {
-        
+        if (nrow(subset(start, start[[SubstitutionRate]] < SubstitutionValue & start[[Input]] > 0))==0) break
         #Randomly select an individual to buy from, individual must have the resource
-        Seller <- start[sample(nrow(subset(start, Input < SubstitutionValue & Input > 0)),1),"ID"]
-        
-        if (length(Seller)==0) break
+        Seller <- sample(subset(start, start[[SubstitutionRate]] < SubstitutionValue & start[[Input]] > 0)$ID,size = 1)
         
         RequestedAmount <- OptimalInputAmount - start[[Input]][Buyer]
         AffordableAmount <- start$Capital[Buyer]/Inputprice
