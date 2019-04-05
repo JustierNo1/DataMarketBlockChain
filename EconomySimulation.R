@@ -163,7 +163,8 @@ while (Counter <= Maxiter) {
     
     #After making all the transactions, the state collects tax and redistributes it equally
     RedistributedTax <- sum(start$Tax)/Population
-    start$Budget <- start$Output*Price-start$Tax+RedistributedTax
+    #Budget Update: New budget is old budget plus output minus tax
+    start$Budget <- start$Output*Price-start$Tax+RedistributedTax + start$Budget
     
     #Firms then readjust their Optimal Production Quantity for the next iteration
     start$OptimalLabour = start$Budget/(Wage*(1+start$Beta/start$Alpha))
@@ -174,7 +175,7 @@ while (Counter <= Maxiter) {
     start$VMPC = Price*(start$Beta*start$Capital^(start$Beta-1)*start$Labour^start$Alpha)
     
     #Fill in the measurement Vector
-    Totalwelfare <- c(Totalwelfare, sum(start$Budget))
+    Totalwelfare <- c(Totalwelfare, sum(start$Output))
   }
   Counter <- Counter + 1
 }
