@@ -1,3 +1,5 @@
+library(Runuran)
+
 Population <- 100
 Price <- 1
 Wage <- 0.3
@@ -32,8 +34,8 @@ Output = Labour^Alpha*Capital^Beta
 Budget = Price*(Labour^Alpha*Capital^Beta)
 
 #A company has an optimal amount of Labour and Capital, given by Calculus:
-OptimalLabour = Budget/(Wage*(1+Beta/Alpha))
-OptimalCapital = Budget/(Interest*(1+Alpha/Beta))
+OptimalLabour = (Alpha/(Alpha+Beta))*(Budget/Wage)
+OptimalCapital = (Beta/(Alpha+Beta))*(Budget/Interest)
 
 #Current Value Marginal Product Labour & Capital
 VMPL = Price*(Alpha*Labour^(Alpha-1)*Capital^Beta)
@@ -167,8 +169,8 @@ while (Counter <= Maxiter) {
     start$Budget <- start$Output*Price-start$Tax+RedistributedTax + start$Budget
     
     #Firms then readjust their Optimal Production Quantity for the next iteration
-    start$OptimalLabour = start$Budget/(Wage*(1+start$Beta/start$Alpha))
-    start$OptimalCapital = start$Budget/(Interest*(1+start$Alpha/start$Beta))
+    start$OptimalLabour = (start$Alpha/(start$Alpha+start$Beta))*(start$Budget/Wage)
+    start$OptimalCapital = (start$Beta/(start$Alpha+start$Beta))*(start$Budget/Interest)
     
     #Current Value Marginal Product Labour & Capital
     start$VMPL = Price*(start$Alpha*start$Labour^(start$Alpha-1)*start$Capital^start$Beta)
