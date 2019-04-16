@@ -17,8 +17,8 @@ Alpha <- c()
 Beta <- c()
 for (i in 1:Population) {
     #Create Alpha/Beta Pair
-    x <- urweibull(n = 1, shape = 2, scale = 0.5, lb = 0, ub = 1)
-    y <- urweibull(n = 1, shape = 2, scale = 0.5, lb = 0, ub = 1)
+    x <- urweibull(n = 1, shape = 2, scale = 0.4, lb = 0, ub = 1)
+    y <- urweibull(n = 1, shape = 2, scale = 0.4, lb = 0, ub = 1)
     #if their sum is equal or above 1, resample
     while (x+y>=1) {
       x <- urweibull(1,2,0.5,0,1)
